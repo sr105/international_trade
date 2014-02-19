@@ -12,7 +12,7 @@ void readRatesFromXml(const QString &filename) {
         return;
 
     QDomNodeList rates = doc.elementsByTagName("rate");
-    for (int i = 0; i < rates.length(); i++) {
+    for (int i = 0; i < rates.size(); i++) {
         QDomNode n = rates.item(i);
         QDomElement from = n.firstChildElement("from");
         QDomElement to = n.firstChildElement("to");
@@ -20,9 +20,8 @@ void readRatesFromXml(const QString &filename) {
         if (from.isNull() || to.isNull() || conversion.isNull() ||
             from.text().isEmpty() || to.text().isEmpty() || conversion.text().isEmpty())
             continue;
-        double rate = 0.0;
         bool ok = false;
-        rate = conversion.text().toDouble(&ok);
+        double rate = conversion.text().toDouble(&ok);
         if (ok)
             Currency::get(from.text())->insert(to.text(), rate);
     }
