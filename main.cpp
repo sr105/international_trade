@@ -11,19 +11,17 @@
 #include <math.h>
 
 float roundToEven(float value) {
-    // Convert to cents
-    value *= 100.0f;
     // Only need tie-breaker if the fraction is
     // 0.5 exactly
     if (qFuzzyCompare(fabsf(value - truncf(value)), 0.5f)) {
         // return nearest even
         float a = ceilf(value);
         if (int(a) % 2 == 0)
-            return a / 100.0f;
-        return floorf(value) / 100.0f;
+            return a;
+        return floorf(value);
     }
 
-    return roundf(value) / 100.0f;
+    return roundf(value);
 }
 
 void testRounding() {
@@ -57,7 +55,7 @@ void total(QString filename, QString item, QString currency) {
         }
         qDebug() << sum << amount << c->to(currency) << "+="
                  << amount * c->to(currency) << split[0];
-        sum += roundToEven(amount * c->to(currency));
+        sum += roundToEven(amount * c->to(currency) * 100.0f) / 100.0f;
     }
     qDebug() << "sum:" << sum;
 }
