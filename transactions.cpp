@@ -49,10 +49,8 @@ double totalTransactions(QString filename, QString item, QString currency) {
             qDebug() << "Failed to parse amount:" << split[2];
             continue;
         }
-        if (!c || !c->hasRate(currency)) {
-            qDebug() << "No known conversion from" << split[3] << "to" << currency;
+        if (!c)
             continue;
-        }
         sum += roundToEven(amount * c->to(currency) * 100.0) / 100.0;
     }
     return sum;

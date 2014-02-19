@@ -26,5 +26,4 @@ void readRatesFromXml(const QString &filename) {
         if (ok)
             Currency::get(from.text())->insert(to.text(), rate);
     }
-    Currency::fillInTable();
 }
