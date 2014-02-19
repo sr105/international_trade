@@ -24,6 +24,7 @@ void XmlRateReader::read() {
         xml.raiseError();
         qDebug() << errorString();
     }
+    Currency::fillInTable();
 }
 
 void XmlRateReader::processRates() {

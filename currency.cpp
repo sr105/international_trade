@@ -93,6 +93,10 @@ void Currency::fillInTable()
     }
 }
 
+QStringList Currency::currencies() {
+    return map.keys();
+}
+
 void Currency::fillInCurrency(QSet<QString> currencies, bool tryReverse) {
     // Make sure this currency has a rate for a direct conversion
     // to each of the currencies passed in.

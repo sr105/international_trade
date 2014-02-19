@@ -3,6 +3,7 @@
 
 #include <QHash>
 #include <QString>
+#include <QStringList>
 
 class Currency {
 public:
@@ -15,8 +16,9 @@ public:
 
     void insert(const QString name, double conversion);
     static void printMap();
-
     static void fillInTable();
+    static QStringList currencies();
+
 private:
     QString _name;
     QHash<QString, double> rates;

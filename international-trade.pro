@@ -6,7 +6,7 @@
 
 cache()
 
-QT       += core
+QT       += core xml
 
 QT       -= gui
 
@@ -29,8 +29,12 @@ UI_DIR = $$DESTDIR/.ui
 
 SOURCES += main.cpp \
     currency.cpp \
-    xmlratereader.cpp
+    xmlratereader.cpp \
+    xmldomratereader.cpp \
+    transactions.cpp
 
 HEADERS += \
     currency.h \
-    xmlratereader.h
+    xmlratereader.h \
+    xmldomratereader.h \
+    transactions.h

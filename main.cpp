@@ -1,93 +1,48 @@
 #include <QCoreApplication>
-
-#include <QFile>
-#include <QByteArray>
 #include <QStringList>
 #include <QDebug>
 
-#include "currency.h"
 #include "xmlratereader.h"
+#include "xmldomratereader.h"
+#include "transactions.h"
 
-#include <math.h>
-
-double roundToEven(double value) {
-    // Only need tie-breaker if the fraction is
-    // 0.5 exactly
-    if (qFuzzyCompare(fabs(value - trunc(value)), 0.5)) {
-        qDebug() << " **** ";
-        // return nearest even
-        double a = ceil(value);
-        if (int(a) % 2 == 0)
-            return a;
-        return floor(value);
-    }
-
-    return round(value);
-}
-
-void testRounding() {
-    QList<double> nums;
-    nums << 24.50 << 23.67 << 23.50 << 23.35 << 23.00 << 0 << -23.00 << -23.35 << -23.50 << -23.67 << -24.50;
-    foreach (double f, nums)
-        qDebug() << f << roundToEven(f);
-}
-
-void total(QString filename, QString item, QString currency) {
-    // for each line, split, if matches item, get currency, convert, add to total
-    double sum = 0.0;
-    QFile csv(filename);
-    csv.open(QIODevice::ReadOnly);
-    while (true) {
-        QString line = csv.readLine();
-        if (line.isEmpty())
-            break;
-        QStringList split = line.split(QRegExp("[, \n]"));
-        if (split.size() < 4 || split[1] != item)
-            continue;
-        bool ok = false;
-        double amount = split[2].toDouble(&ok);
-        Currency *c = Currency::get(split[3]);
-        if (!ok) {
-            qDebug() << "Failed to parse amount:" << split[2];
-            continue;
-        }
-        if (!c || !c->hasRate(currency)) {
-            qDebug() << "No known conversion from" << split[3] << "to" << currency;
-            continue;
-        }
-        qDebug("%.17g", sum);
-        qDebug("%.17g", roundToEven(amount * c->to(currency) * 100.0) / 100.0);
-        qDebug() << split[0].trimmed();
-//        qDebug() << sum << amount << c->to(currency) << "+="
-//                 << amount * c->to(currency) << "("
-//                 << roundToEven(amount * c->to(currency) * 100.0) / 100.0 << ")"
-//                 << line.trimmed();
-        sum += roundToEven(amount * c->to(currency) * 100.0) / 100.0;
-    }
-    qDebug("sum: %10.2f", (float)sum);
-}
+#include "currency.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+    QString currency("USD"), sku("DM1182");
+    QStringList args = a.arguments();
+    switch(args.size()) {
+    default:
+        qDebug() << "Usage:" << qPrintable(args[0]) << "rates.xml transactions.csv [sku [currency]]";
+        return 1;
+    case 5:
+        currency = args[4];
+    case 4:
+        sku = args[3];
+    case 3:
+        break;
+    }
 
-    //testRounding();
+    //XmlRateReader reader(args[1]);
+    //reader.read();
 
-    //XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/test_rates.xml");
+    readRatesFromXml(args[1]);
 
-    //XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_RATES.xml");
-    XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/RATES.xml");
-    reader.read();
+    // Read in sales csv and find total sales in currency for sku
+    printf("%.2f\n", (float)totalTransactions(args[2], sku, currency));
+    return 0;
 
-    Currency::printMap();
-    Currency::fillInTable();
-    Currency::printMap();
-
-    // Read in sales csv
-    // Find total sales in USD for DM1182
-    //total("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_TRANS.csv", "DM1182", "USD");
-    total("/Users/hchapman/Desktop/international-trade/doc/TRANS.csv", "DM1182", "USD");
+    // Do all combinations to see if any of them trigger a rounding tie-breaker
+    // Answer: nope
+    QString b = "DM1182 DM1210 DM1230 DM1294 DM1537 DM1541 DM1724 DM1759 DM1786 DM1873";
+    foreach (const QString &item_sku, b.split(" "))
+        foreach (const QString &code, Currency::currencies())
+            printf("%s %s %.2f\n",
+                   qPrintable(item_sku),
+                   qPrintable(code),
+                   (float)totalTransactions(args[2], item_sku, code));
 
     return 0;
-//    return a.exec();
 }
