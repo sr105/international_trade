@@ -22,14 +22,14 @@ bool Currency::hasRate(QString currency) const
     return currency == name() || rates.contains(currency);
 }
 
-float Currency::to(QString currency) const {
+double Currency::to(QString currency) const {
     if (currency == name())
-        return 1.0f;
-    return rates.value(currency, 0.0f);
+        return 1.0;
+    return rates.value(currency, 0.0);
 }
-//float from(QString currency);
+//double from(QString currency);
 
-void Currency::insert(const QString name, float conversion) {
+void Currency::insert(const QString name, double conversion) {
     if (rates.contains(name))
         qDebug() << "WARNING: old value for" << name << "is" << rates[name];
     rates[name] = conversion;
@@ -118,7 +118,7 @@ void Currency::fillInCurrency(QSet<QString> currencies, bool tryReverse) {
         Currency *c3 = Currency::get(destination);
         // See if there's a direct reversal first
         if (c3->hasRate(name())) {
-            insert(destination, 1.0f / c3->rates[name()]);
+            insert(destination, 1.0 / c3->rates[name()]);
             continue;
         }
         // See if there's an indirect reversal??

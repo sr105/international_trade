@@ -10,16 +10,16 @@ public:
     QString name() const;
 
     bool hasRate(QString currency) const;
-    float to(QString currency) const;
-    //float from(QString currency);
+    double to(QString currency) const;
+    //double from(QString currency);
 
-    void insert(const QString name, float conversion);
+    void insert(const QString name, double conversion);
     static void printMap();
 
     static void fillInTable();
 private:
     QString _name;
-    QHash<QString, float> rates;
+    QHash<QString, double> rates;
     static QHash<QString, Currency *> map;
 
     Currency(const QString name) : _name(name) {}

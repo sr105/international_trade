@@ -10,31 +10,31 @@
 
 #include <math.h>
 
-float roundToEven(float value) {
+double roundToEven(double value) {
     // Only need tie-breaker if the fraction is
     // 0.5 exactly
-    if (qFuzzyCompare(fabsf(value - truncf(value)), 0.5f)) {
+    if (qFuzzyCompare(fabs(value - trunc(value)), 0.5)) {
         qDebug() << " **** ";
         // return nearest even
-        float a = ceilf(value);
+        double a = ceil(value);
         if (int(a) % 2 == 0)
             return a;
-        return floorf(value);
+        return floor(value);
     }
 
-    return roundf(value);
+    return round(value);
 }
 
 void testRounding() {
-    QList<float> nums;
-    nums << 24.50f << 23.67f << 23.50f << 23.35f << 23.00f << 0 << -23.00f << -23.35f << -23.50f << -23.67f << -24.50f;
-    foreach (float f, nums)
+    QList<double> nums;
+    nums << 24.50 << 23.67 << 23.50 << 23.35 << 23.00 << 0 << -23.00 << -23.35 << -23.50 << -23.67 << -24.50;
+    foreach (double f, nums)
         qDebug() << f << roundToEven(f);
 }
 
 void total(QString filename, QString item, QString currency) {
     // for each line, split, if matches item, get currency, convert, add to total
-    float sum = 0.0f;
+    double sum = 0.0;
     QFile csv(filename);
     csv.open(QIODevice::ReadOnly);
     while (true) {
@@ -45,7 +45,7 @@ void total(QString filename, QString item, QString currency) {
         if (split.size() < 4 || split[1] != item)
             continue;
         bool ok = false;
-        float amount = split[2].toFloat(&ok);
+        double amount = split[2].toDouble(&ok);
         Currency *c = Currency::get(split[3]);
         if (!ok) {
             qDebug() << "Failed to parse amount:" << split[2];
@@ -55,16 +55,16 @@ void total(QString filename, QString item, QString currency) {
             qDebug() << "No known conversion from" << split[3] << "to" << currency;
             continue;
         }
-        qDebug("%18.12f", sum);
-        qDebug("%18.12f", roundToEven(amount * c->to(currency) * 100.0f) / 100.0f);
+        qDebug("%18.12g", sum);
+        qDebug("%18.12g", roundToEven(amount * c->to(currency) * 100.0) / 100.0);
         qDebug() << split[0].trimmed();
 //        qDebug() << sum << amount << c->to(currency) << "+="
 //                 << amount * c->to(currency) << "("
-//                 << roundToEven(amount * c->to(currency) * 100.0f) / 100.0f << ")"
+//                 << roundToEven(amount * c->to(currency) * 100.0) / 100.0 << ")"
 //                 << line.trimmed();
-        sum += roundToEven(amount * c->to(currency) * 100.0f) / 100.0f;
+        sum += roundToEven(amount * c->to(currency) * 100.0) / 100.0;
     }
-    qDebug("sum: %16.4f", sum);
+    qDebug("sum: %5.7g", sum);
 }
 
 int main(int argc, char *argv[])

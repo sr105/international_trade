@@ -56,9 +56,9 @@ void XmlRateReader::processRate() {
         return;
     //qDebug() << "    " << "to" << to;
 
-    float conversion = 0.0f;
+    double conversion = 0.0;
     bool ok = false;
-    conversion = getTextElement("conversion").toFloat(&ok);
+    conversion = getTextElement("conversion").toDouble(&ok);
     if (ok)
         c->insert(to, conversion);
     //qDebug() << "    " << "conversion" << conversion;
