@@ -12,7 +12,7 @@
 double roundToEven(double value) {
     // Only need tie-breaker if the fraction is 0.5 exactly, then return nearest even
     if (qFuzzyCompare(fabs(value - trunc(value)), 0.5)) {
-        qDebug("***** rounding *****");
+        qDebug("***** rounding tie-breaker *****");
         if (int(ceil(value)) % 2 == 0)
             return ceil(value);
         return floor(value);

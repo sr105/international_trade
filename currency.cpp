@@ -70,12 +70,6 @@ void Currency::fillInTable()
     //       or failure). If no more progress is made and the table is still
     //       incomplete, try using reverse conversions.
 
-    // Note:
-    //       I'm nervous that the randomness of the order could affect the outcome.
-    //       I'm also nervous that we'll perform a reverse calculation in lieu of
-    //       a forward conversion when the forward is available after a previous
-    //       reverse.
-
     foreach (Currency *c, map.values())
         foreach (const QString &currency, map.keys())
             c->findRate(currency);
