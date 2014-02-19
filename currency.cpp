@@ -19,10 +19,12 @@ QString Currency::name() const {
 
 bool Currency::hasRate(QString currency) const
 {
-    return rates.contains(currency);
+    return currency == name() || rates.contains(currency);
 }
 
 float Currency::to(QString currency) const {
+    if (currency == name())
+        return 1.0f;
     return rates.value(currency, 0.0f);
 }
 //float from(QString currency);
