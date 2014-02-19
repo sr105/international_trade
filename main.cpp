@@ -55,8 +55,8 @@ void total(QString filename, QString item, QString currency) {
             qDebug() << "No known conversion from" << split[3] << "to" << currency;
             continue;
         }
-        qDebug("%18.12g", sum);
-        qDebug("%18.12g", roundToEven(amount * c->to(currency) * 100.0) / 100.0);
+        qDebug("%.17g", sum);
+        qDebug("%.17g", roundToEven(amount * c->to(currency) * 100.0) / 100.0);
         qDebug() << split[0].trimmed();
 //        qDebug() << sum << amount << c->to(currency) << "+="
 //                 << amount * c->to(currency) << "("
@@ -64,7 +64,7 @@ void total(QString filename, QString item, QString currency) {
 //                 << line.trimmed();
         sum += roundToEven(amount * c->to(currency) * 100.0) / 100.0;
     }
-    qDebug("sum: %5.7g", sum);
+    qDebug("sum: %10.2f", (float)sum);
 }
 
 int main(int argc, char *argv[])
