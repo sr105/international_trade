@@ -41,7 +41,7 @@ void Currency::printMap() {
         qDebug("%s:", qPrintable(key));
         Currency *c = map[key];
         foreach (const QString &key2, c->rates.keys()) {
-            qDebug("\t%s:  %f", qPrintable(key2), c->to(key2));
+            qDebug("\t%s:  %18.16f", qPrintable(key2), c->to(key2));
         }
     }
 }

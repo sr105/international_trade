@@ -14,6 +14,7 @@ float roundToEven(float value) {
     // Only need tie-breaker if the fraction is
     // 0.5 exactly
     if (qFuzzyCompare(fabsf(value - truncf(value)), 0.5f)) {
+        qDebug() << " **** ";
         // return nearest even
         float a = ceilf(value);
         if (int(a) % 2 == 0)
@@ -32,6 +33,7 @@ void testRounding() {
 }
 
 void total(QString filename, QString item, QString currency) {
+    // for each line, split, if matches item, get currency, convert, add to total
     float sum = 0.0f;
     QFile csv(filename);
     csv.open(QIODevice::ReadOnly);
@@ -53,23 +55,28 @@ void total(QString filename, QString item, QString currency) {
             qDebug() << "No known conversion from" << split[3] << "to" << currency;
             continue;
         }
-        qDebug() << sum << amount << c->to(currency) << "+="
-                 << amount * c->to(currency) << split[0];
+        qDebug("%18.12f", sum);
+        qDebug("%18.12f", roundToEven(amount * c->to(currency) * 100.0f) / 100.0f);
+        qDebug() << split[0].trimmed();
+//        qDebug() << sum << amount << c->to(currency) << "+="
+//                 << amount * c->to(currency) << "("
+//                 << roundToEven(amount * c->to(currency) * 100.0f) / 100.0f << ")"
+//                 << line.trimmed();
         sum += roundToEven(amount * c->to(currency) * 100.0f) / 100.0f;
     }
-    qDebug() << "sum:" << sum;
+    qDebug("sum: %16.4f", sum);
 }
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    testRounding();
+    //testRounding();
 
     //XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/test_rates.xml");
 
-    XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_RATES.xml");
-    //XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/RATES.xml");
+    //XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_RATES.xml");
+    XmlRateReader reader("/Users/hchapman/Desktop/international-trade/doc/RATES.xml");
     reader.read();
 
     Currency::printMap();
@@ -78,8 +85,8 @@ int main(int argc, char *argv[])
 
     // Read in sales csv
     // Find total sales in USD for DM1182
-    total("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_TRANS.csv", "DM1182", "USD");
-    // for each line, split, if matches item, get currency, convert, add to total
+    //total("/Users/hchapman/Desktop/international-trade/doc/SAMPLE_TRANS.csv", "DM1182", "USD");
+    total("/Users/hchapman/Desktop/international-trade/doc/TRANS.csv", "DM1182", "USD");
 
     return 0;
 //    return a.exec();
