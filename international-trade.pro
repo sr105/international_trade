@@ -6,7 +6,7 @@
 
 greaterThan(QT_MAJOR_VERSION, 4): cache()
 
-QT       += core xml
+QT       += core xml xmlpatterns
 
 QT       -= gui
 
@@ -31,10 +31,12 @@ SOURCES += main.cpp \
     currency.cpp \
     xmlratereader.cpp \
     xmldomratereader.cpp \
-    transactions.cpp
+    transactions.cpp \
+    xqueryratereader.cpp
 
 HEADERS += \
     currency.h \
     xmlratereader.h \
     xmldomratereader.h \
-    transactions.h
+    transactions.h \
+    xqueryratereader.h

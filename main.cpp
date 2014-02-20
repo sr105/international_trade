@@ -4,6 +4,7 @@
 
 #include "xmlratereader.h"
 #include "xmldomratereader.h"
+#include "xqueryratereader.h"
 #include "transactions.h"
 
 #include "currency.h"
@@ -25,10 +26,13 @@ int main(int argc, char *argv[])
         break;
     }
 
+    //readRatesUsingXQuery(args[1]);
+    readRatesUsingXQuery2(args[1]);
+
     //XmlRateReader reader(args[1]);
     //reader.read();
 
-    readRatesFromXml(args[1]);
+    //readRatesFromXml(args[1]);
 
     // Read in sales csv and find total sales in currency for sku
     printf("%.2f\n", (float)totalTransactions(args[2], sku, currency));
