@@ -10,9 +10,8 @@
 // Notes: my biggest issue with this design is that the different pieces of
 //        each rate are pulled out separately. I would prefer one query that
 //        pulled them out in sets.
-void readRatesUsingXQuery(const QString filename) {
-    QFileInfo fi(filename);
-    const QString queryUrl = QString("doc('%1')//rate/%2/string()").arg(fi.absoluteFilePath());
+void readRatesUsingXQuery(const QFileInfo file) {
+    const QString queryUrl = QString("doc('%1')//rate/%2/string()").arg(file.absoluteFilePath());
 
     typedef QPair<QStringList &, QString> QueryPair;
     QList<QueryPair> queries;
@@ -30,9 +29,8 @@ void readRatesUsingXQuery(const QString filename) {
 }
 
 // Same as method above but without any pizzazz. Note that it's only one line shorter.
-void readRatesUsingXQuery_expanded(const QString filename) {
-    QFileInfo fi(filename);
-    const QString queryUrl = QString("doc('%1')//rate/%2/string()").arg(fi.absoluteFilePath());
+void readRatesUsingXQuery_expanded(const QFileInfo file) {
+    const QString queryUrl = QString("doc('%1')//rate/%2/string()").arg(file.absoluteFilePath());
 
     QStringList from, to, conversion;
     QXmlQuery query;
@@ -48,10 +46,9 @@ void readRatesUsingXQuery_expanded(const QString filename) {
         Currency::addRate(from.at(i), to.at(i), conversion.at(i));
 }
 
-void readRatesUsingXQuery2(const QString filename) {
-    QFileInfo fi(filename);
+void readRatesUsingXQuery2(const QFileInfo file) {
     const QString queryUrl = QString("doc('%1')//rate/string-join((from, to, conversion)/string(), ',')")
-                             .arg(fi.absoluteFilePath());
+                             .arg(file.absoluteFilePath());
 
     QStringList rates;
     QXmlQuery query;
