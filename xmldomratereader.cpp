@@ -17,12 +17,8 @@ void readRatesFromXml(const QString &filename) {
         QDomElement from = n.firstChildElement("from");
         QDomElement to = n.firstChildElement("to");
         QDomElement conversion = n.firstChildElement("conversion");
-        if (from.isNull() || to.isNull() || conversion.isNull() ||
-            from.text().isEmpty() || to.text().isEmpty() || conversion.text().isEmpty())
+        if (from.isNull() || to.isNull() || conversion.isNull())
             continue;
-        bool ok = false;
-        double rate = conversion.text().toDouble(&ok);
-        if (ok)
-            Currency::get(from.text())->insert(to.text(), rate);
+        Currency::addRate(from.text(), to.text(), conversion.text());
     }
 }

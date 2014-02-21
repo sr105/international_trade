@@ -25,16 +25,27 @@ void readRatesUsingXQuery(const QString filename) {
     }
     if (to.size() != from.size() || to.size() != conversion.size())
         return;
-    for (int i = 0; i < to.size(); ++i) {
-        qDebug() << qPrintable(QString("%1 => %2 : %3")
-                               .arg(from.at(i).simplified())
-                               .arg(to.at(i).simplified())
-                               .arg(conversion.at(i).simplified()));
-        bool ok = false;
-        double rate = conversion.at(i).simplified().toDouble(&ok);
-        if (ok)
-            Currency::get(from.at(i).simplified())->insert(to.at(i).simplified(), rate);
-    }
+    for (int i = 0; i < to.size(); ++i)
+        Currency::addRate(from.at(i), to.at(i), conversion.at(i));
+}
+
+// Same as method above but without any pizzazz. Note that it's only one line shorter.
+void readRatesUsingXQuery_expanded(const QString filename) {
+    QFileInfo fi(filename);
+    const QString queryUrl = QString("doc('%1')//rate/%2/string()").arg(fi.absoluteFilePath());
+
+    QStringList from, to, conversion;
+    QXmlQuery query;
+    query.setQuery(queryUrl.arg("from"));
+    query.evaluateTo(&from);
+    query.setQuery(queryUrl.arg("to"));
+    query.evaluateTo(&to);
+    query.setQuery(queryUrl.arg("conversion"));
+    query.evaluateTo(&conversion);
+    if (to.size() != from.size() || to.size() != conversion.size())
+        return;
+    for (int i = 0; i < to.size(); ++i)
+        Currency::addRate(from.at(i), to.at(i), conversion.at(i));
 }
 
 void readRatesUsingXQuery2(const QString filename) {
@@ -50,13 +61,6 @@ void readRatesUsingXQuery2(const QString filename) {
         QStringList values = rate.split(',');
         if (values.size() != 3)
             continue;
-        qDebug() << qPrintable(QString("%1 => %2 : %3")
-                               .arg(values[0].simplified())
-                               .arg(values[1].simplified())
-                               .arg(values[2].simplified()));
-        bool ok = false;
-        double conversion = values[2].simplified().toDouble(&ok);
-        if (ok)
-            Currency::get(values[0].simplified())->insert(values[1].simplified(), conversion);
+        Currency::addRate(values[0], values[1], values[2]);
     }
 }

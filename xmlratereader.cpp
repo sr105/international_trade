@@ -41,15 +41,7 @@ void XmlRateReader::processRate() {
     if (!xml.isStartElement() || xml.name() != "rate")
         return;
 
-    QString from = getTextElement("from");
-    QString to = getTextElement("to");
-    if (from.isEmpty() || to.isEmpty())
-        return;
-
-    bool ok = false;
-    double conversion = getTextElement("conversion").toDouble(&ok);
-    if (ok)
-        Currency::get(from)->insert(to, conversion);
+    Currency::addRate(getTextElement("from"), getTextElement("to"), getTextElement("conversion"));
     // Jump past end of rate
     xml.skipCurrentElement();
 }

@@ -13,6 +13,8 @@ public:
     bool hasRate(const QString currency) const;
     double to(const QString currency);
 
+    static void addRate(const QString from, const QString to, double rate);
+    static void addRate(const QString from, const QString to, const QString rate);
     void insert(const QString name, double conversion);
     static void printMap();
     static void fillInTable();

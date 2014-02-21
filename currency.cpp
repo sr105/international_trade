@@ -34,12 +34,26 @@ double Currency::to(const QString currency) {
 }
 
 void Currency::insert(const QString name, double conversion) {
+    //qDebug() << qPrintable(QString("%1 => %2 : %3").arg(this->name(), name).arg(conversion));
     if (rates.contains(name))
         qDebug() << "WARNING: old value for" << name << "is" << rates[name];
     rates[name] = conversion;
     // For reverse mappings of currencies with no forward mappings
     if (!map.contains(name))
         get(name);
+}
+
+void Currency::addRate(const QString from, const QString to, double rate) {
+    if (from.simplified().isEmpty() || to.simplified().isEmpty())
+        return;
+    Currency::get(from.simplified())->insert(to.simplified(), rate);
+}
+
+void Currency::addRate(const QString from, const QString to, const QString rate) {
+    bool ok = false;
+    double rateAsDouble = rate.simplified().toDouble(&ok);
+    if (ok)
+        addRate(from, to, rateAsDouble);
 }
 
 void Currency::printMap() {
