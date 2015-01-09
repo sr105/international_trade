@@ -3,8 +3,6 @@
 #include <QFile>
 #include <QDebug>
 
-//#include "currency.h"
-
 XmlRateReader::XmlRateReader(const QString filename) :
     _filename(filename),
     _total(0)

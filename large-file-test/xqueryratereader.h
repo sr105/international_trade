@@ -3,8 +3,7 @@
 
 #include <QFileInfo>
 
-// Note: you can pass a filename (as a QString) to these methods
-
+// Note: you can pass a filename (as a QString) to this
 void readUsingXQuery(const QFileInfo file);
 
 #endif // XQUERYRATEREADER_H
