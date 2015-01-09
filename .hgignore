@@ -1,5 +1,5 @@
 syntax: glob
 .qmake.cache
-international-trade.pro.user
+*.pro.user*
 Makefile
 build
