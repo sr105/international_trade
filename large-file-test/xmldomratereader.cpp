@@ -22,5 +22,5 @@ void readUsingDomDocument(const QString filename) {
             total += size.text().toULongLong();
     }
 
-    qDebug("total = %llu", total);
+//    qDebug("total = %llu", total);
 }

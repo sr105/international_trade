@@ -35,8 +35,6 @@ void XmlRateReader::read() {
         _xml.raiseError();
         qDebug() << errorString();
     }
-
-    qDebug("total = %llu", _total);
 }
 
 // This method serves to illustrate how readNextStartElement()
@@ -133,16 +131,12 @@ void XmlRateReader::processAllWithMethod(QStringList names, member_fn_type metho
     QString name = names.first();
     names.removeFirst();
     while (!_xml.atEnd()) {
-        qDebug("Looking for %s", qPrintable(name));
         while (_xml.readNextStartElement()) {
-            printCurrent();
             if (_xml.name() == name) {
-                if (names.isEmpty()) {
+                if (names.isEmpty())
                     (this->*method)();
-                } else {
+                else
                     processAllWithMethod(names, method);
-                    qDebug("Looking for %s", qPrintable(name));
-                }
                 // The just called level may not have left us
                 // at the end of the element named name. This
                 // explicitly moves us there. Otherwise we might
@@ -157,10 +151,8 @@ void XmlRateReader::processAllWithMethod(QStringList names, member_fn_type metho
                     _xml.skipCurrentElement();
             }
         }
-        if (_xml.isEndElement() && _xml.name() == currentElementName) {
-            qDebug("Found matching end for %s", qPrintable(currentElementName));
+        if (_xml.isEndElement() && _xml.name() == currentElementName)
             break;
-        }
     }
 }
 
@@ -168,7 +160,6 @@ void XmlRateReader::processFile() {
     QHash<QString, QString> results = getTextElements(QStringList() << "size" << "hash");
     QString size = results.value("size", "");
     QString hash = results.value("hash", "");
-    qDebug("  ::_file_::  %s  %s", qPrintable(size), qPrintable(hash));
     if (hash.isEmpty() || size.isEmpty())
         return;
 

@@ -21,5 +21,5 @@ void readUsingXQuery(const QFileInfo file) {
         if (values[0][0].isDigit())
             total += values[1].toULongLong();
     }
-    qDebug("total = %llu", total);
+//    qDebug("total = %llu", total);
 }

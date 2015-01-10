@@ -11,7 +11,7 @@ generate_test_file() {
     # xml without the root element start and end tags
     sed '1d; $d' < test.xml > test_piece.xml
 
-    for i in `seq 1 10`; do
+    for i in `seq 1 1000`; do
 	cat test_piece.xml >> test_big.xml
     done
     rm test_piece.xml
