@@ -3,3 +3,4 @@ syntax: glob
 *.pro.user*
 Makefile
 build
+test_big.xml

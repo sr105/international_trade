@@ -3,6 +3,6 @@
 
 #include <QString>
 
-void readUsingDomDocument(const QString &filename);
+void readUsingDomDocument(const QString filename);
 
 #endif // XMLDOMRATEREADER_H

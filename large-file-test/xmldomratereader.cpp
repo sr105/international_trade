@@ -3,7 +3,7 @@
 #include <QDomDocument>
 #include <QFile>
 
-void readUsingDomDocument(const QString &filename) {
+void readUsingDomDocument(const QString filename) {
     QDomDocument doc;
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file))
