@@ -16,11 +16,18 @@ public:
     typedef void (XmlRateReader::*member_fn_type)();
 
 private:
+    void printCurrent(QString extra = QString());
+
+    void printStartElementTree();
+
+    void processAllNamedElementsWithMethod(QString name, member_fn_type method);
+
     void processAllWithMethod(QString name, member_fn_type method);
     void processAllWithMethod(QStringList names, member_fn_type method);
 
     void processFile();
-    QString getTextElement(const QString name);
+    QHash<QString, QString> getTextElements(QStringList names);
+    QString getTextElement(const QString name, QString parentName = QString());
     QString errorString();
 
     QString _filename;
