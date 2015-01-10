@@ -10,10 +10,6 @@
 #define USE_RECURSIVE_APPROACH 1       // uses a heirarchy
 //#define USE_FIND_ALL_NAMED_ELEMENTS 1  // like QDomDocument::elementsByTagName()
 
-// Pick one of these:
-//#define PROCESS_TEXT_ONE_AT_A_TIME 1
-#define PROCESS_TEXT_ALL_AT_ONCE 1
-
 XmlRateReader::XmlRateReader(const QString filename) :
     _filename(filename),
     _total(0)
@@ -169,18 +165,9 @@ void XmlRateReader::processAllWithMethod(QStringList names, member_fn_type metho
 }
 
 void XmlRateReader::processFile() {
-#if PROCESS_TEXT_ONE_AT_A_TIME
-    // This will fail if the child elements do not come in the following
-    // order.
-    QString size = getTextElement("size", "file");
-    QString hash = getTextElement("hash", "file");
-#elif PROCESS_TEXT_ALL_AT_ONCE
-    // This will return a hash table with all of the results found, no
-    // matter the order.
     QHash<QString, QString> results = getTextElements(QStringList() << "size" << "hash");
     QString size = results.value("size", "");
     QString hash = results.value("hash", "");
-#endif
     qDebug("  ::_file_::  %s  %s", qPrintable(size), qPrintable(hash));
     if (hash.isEmpty() || size.isEmpty())
         return;
@@ -208,6 +195,7 @@ QHash<QString, QString> XmlRateReader::getTextElements(QStringList names) {
             continue;
         }
         // readElementText() internally skips the current element
+        // TODO: I think readElementText() can throw
         results.insert(_xml.name().toString(),
                        _xml.readElementText(_xml.SkipChildElements));
         names.removeOne(_xml.name().toString());
@@ -215,27 +203,6 @@ QHash<QString, QString> XmlRateReader::getTextElements(QStringList names) {
     return results;
 }
 
-QString XmlRateReader::getTextElement(const QString name, QString parentName) {
-    if (parentName.isEmpty())
-        parentName = _xml.name().toString();
-
-    while (!_xml.atEnd()) {
-        if (_xml.isEndElement() && _xml.name() == parentName)
-            break;
-
-        _xml.readNextStartElement();
-        if (_xml.name() == name)
-            // readElementText() internally skips the current element
-            return _xml.readElementText(_xml.SkipChildElements);
-
-        // readNextStartElement() may have already advanced us
-        // to the end element if there were no children
-        if (!_xml.isEndElement())
-            _xml.skipCurrentElement();
-    }
-
-    return QString();
-}
 
 QString XmlRateReader::errorString() {
     return QObject::tr("%1\nLine %2, column %3")
