@@ -7,7 +7,7 @@
 // Pick one of these:
 //
 //#define PRINT_START_ELEMENT_TREE 1
-#define USE_RECURSIVE_APPROACH 1       // uses a heirarchy
+#define USE_RECURSIVE_APPROACH 1       // uses a hierarchy
 //#define USE_FIND_ALL_NAMED_ELEMENTS 1  // like QDomDocument::elementsByTagName()
 
 XmlRateReader::XmlRateReader(const QString filename) :
@@ -119,8 +119,8 @@ void XmlRateReader::processAllNamedElementsWithMethod(QString name, member_fn_ty
     }
 }
 
-// Like processAllNamedElementsWithMethod() above but with a defined heirarchy.
-// method will only be applied to elements with a heirarchy that matches names.
+// Like processAllNamedElementsWithMethod() above but with a defined hierarchy.
+// method will only be applied to elements with a hierarchy that matches names.
 // Example: names = QStringList() << "root element" << "next level" << ... << "name";
 void XmlRateReader::processAllWithMethod(QStringList names, member_fn_type method)
 {
