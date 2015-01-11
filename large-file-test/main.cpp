@@ -48,12 +48,14 @@ void readUsingEasyStreamReader1(const QString filename) {
     EasyXmlStreamReader reader(filename);
     qulonglong total = 0;
     reader.processElementsByTagName("file", processFile, &total);
+    //    qDebug("total = %llu", total);
 }
 
 void readUsingEasyStreamReader2(const QString filename) {
     EasyXmlStreamReader reader(filename);
     qulonglong total = 0;
     reader.processElementsByTagNameHierarchy(QStringList() << "update" << "install" << "file", processFile, &total);
+    //    qDebug("total = %llu", total);
 }
 
 void runTests(const QString filename) {
