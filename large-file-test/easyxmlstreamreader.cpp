@@ -177,7 +177,6 @@ QHash<QString, QString> EasyXmlStreamReader::getTextElements(QStringList names) 
             continue;
         }
         // readElementText() internally skips the current element
-        // TODO: I think readElementText() can throw
         results.insert(_xml.name().toString(),
                        _xml.readElementText(_xml.SkipChildElements));
         names.removeOne(_xml.name().toString());
