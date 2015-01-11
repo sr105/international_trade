@@ -60,8 +60,12 @@ void runTests(const QString filename) {
     // Run a test parse using a large XML file and check the
     // performance of the different methods.
 
-    qDebug("%10d ms XmlStreamReader::processElementsByTagName", runTest(&readUsingEasyStreamReader1, filename));
+    QFile f(filename);
+    f.readAll();
+    f.close();
+
     qDebug("%10d ms XmlStreamReader::processElementsByTagNameHierarchy", runTest(&readUsingEasyStreamReader2, filename));
+    qDebug("%10d ms XmlStreamReader::processElementsByTagName", runTest(&readUsingEasyStreamReader1, filename));
 
     qDebug("%10d ms XDomDocument", runTest(&readUsingDomDocument, filename));
     qDebug("%10d ms XQuery", runTest(&readUsingXQuery, filename));
