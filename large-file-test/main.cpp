@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QTime>
 
-#include "xmlratereader.h"
 #include "xmldomratereader.h"
 #include "xqueryratereader.h"
 #include "easyxmlstreamreader.h"
@@ -31,11 +30,6 @@ int runTest(void (*fn)(QString), QString filename) {
 
 void readUsingXQuery(const QString filename) {
     readUsingXQuery(QFileInfo(filename));
-}
-
-void readUsingStreamReader(const QString filename) {
-    XmlRateReader reader(filename);
-    reader.read();
 }
 
 void processFile(EasyXmlStreamReader &reader, void *data) {
@@ -66,21 +60,11 @@ void runTests(const QString filename) {
     // Run a test parse using a large XML file and check the
     // performance of the different methods.
 
-    qDebug("%10d ms XmlStreamReader", runTest(&readUsingEasyStreamReader1, filename));
-    qDebug("%10d ms XmlStreamReader", runTest(&readUsingEasyStreamReader2, filename));
+    qDebug("%10d ms XmlStreamReader::processElementsByTagName", runTest(&readUsingEasyStreamReader1, filename));
+    qDebug("%10d ms XmlStreamReader::processElementsByTagNameHierarchy", runTest(&readUsingEasyStreamReader2, filename));
 
-    qDebug("%10d ms XQuery", runTest(&readUsingXQuery, filename));
-    qDebug("%10d ms XmlStreamReader", runTest(&readUsingStreamReader, filename));
     qDebug("%10d ms XDomDocument", runTest(&readUsingDomDocument, filename));
-
-    {
-        EasyXmlStreamReader reader("sample.xml");
-        reader.printElementTree();
-    }
-    {
-        EasyXmlStreamReader reader2("sample.xml");
-        reader2.printStartElementTree();
-    }
+    qDebug("%10d ms XQuery", runTest(&readUsingXQuery, filename));
 }
 
 int main(int argc, char *argv[])

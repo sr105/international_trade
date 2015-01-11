@@ -28,13 +28,11 @@ RCC_DIR = $$DESTDIR/.qrc
 UI_DIR = $$DESTDIR/.ui
 
 SOURCES += main.cpp \
-    xmlratereader.cpp \
     xmldomratereader.cpp \
     xqueryratereader.cpp \
     easyxmlstreamreader.cpp
 
 HEADERS += \
-    xmlratereader.h \
     xmldomratereader.h \
     xqueryratereader.h \
     easyxmlstreamreader.h
