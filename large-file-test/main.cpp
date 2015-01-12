@@ -8,7 +8,7 @@
 #include "easyxmlstreamreader.h"
 
 int runTest(void (*fn)(QString), QString filename) {
-    int runs = 10;
+    int runs = 40;
     QList<int> runTimes;
     QTime t;
 

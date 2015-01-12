@@ -134,24 +134,25 @@ void EasyXmlStreamReader::processElementsByTagNameHierarchy(QStringList names, f
     names.removeFirst();
     while (!_xml.atEnd()) {
         while (_xml.readNextStartElement()) {
-            if (_xml.name() == name) {
-                if (names.isEmpty())
-                    method(*this, data);
-                else
-                    processElementsByTagNameHierarchy(names, method, data);
-                // The just called level may not have left us
-                // at the end of the element named name. This
-                // explicitly moves us there. Otherwise we might
-                // recurse unexpectedly. Example: if "name" has
-                // a child element named "name" and we've returned
-                // here before seeing the child, we'll end up
-                // processing the child as if it were the parent.
-                while(!(_xml.isEndElement() && _xml.name() == name))
-                    _xml.skipCurrentElement();
-            } else {
-                if (!_xml.isEndElement())
-                    _xml.skipCurrentElement();
+            if (_xml.name() != name) {
+                _xml.skipCurrentElement();
+                continue;
             }
+
+            if (names.isEmpty())
+                method(*this, data);
+            else
+                processElementsByTagNameHierarchy(names, method, data);
+
+            // The just called level may not have left us
+            // at the end of the element named name. This
+            // explicitly moves us there. Otherwise we might
+            // recurse unexpectedly. Example: if "name" has
+            // a child element named "name" and we've returned
+            // here before seeing the child, we'll end up
+            // processing the child as if it were the parent.
+            while(!(_xml.isEndElement() && _xml.name() == name))
+                _xml.skipCurrentElement();
         }
         if (_xml.isEndElement() && _xml.name() == currentElementName)
             break;
