@@ -32,7 +32,10 @@ public:
     void processElementsByTagName(QString name, fn_type method, void *data);
     void processElementsByTagNameHierarchy(QStringList names, fn_type method, void *data);
 
+    // Uses readElementText(SkipChildElements)
     QHash<QString, QString> getTextElements(QStringList names);
+    // Uses text()
+    QHash<QString, QString> getTextElements2(QStringList names);
 
     void printCurrent(QString extra = QString());
 

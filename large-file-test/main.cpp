@@ -44,6 +44,18 @@ void processFile(EasyXmlStreamReader &reader, void *data) {
         total += size.toULongLong();
 }
 
+void processFile2(EasyXmlStreamReader &reader, void *data) {
+    QHash<QString, QString> results = reader.getTextElements2(QStringList() << "size" << "hash");
+    QString size = results.value("size", "");
+    QString hash = results.value("hash", "");
+    if (hash.isEmpty() || size.isEmpty())
+        return;
+
+    qulonglong &total = *(qulonglong *)data;
+    if (hash[0].isDigit())
+        total += size.toULongLong();
+}
+
 void readUsingEasyStreamReader1(const QString filename) {
     EasyXmlStreamReader reader(filename);
     qulonglong total = 0;
@@ -58,6 +70,13 @@ void readUsingEasyStreamReader2(const QString filename) {
     //    qDebug("total = %llu", total);
 }
 
+void readUsingEasyStreamReader2_2(const QString filename) {
+    EasyXmlStreamReader reader(filename);
+    qulonglong total = 0;
+    reader.processElementsByTagNameHierarchy(QStringList() << "update" << "install" << "file", processFile2, &total);
+    //    qDebug("total = %llu", total);
+}
+
 void runTests(const QString filename) {
     // Run a test parse using a large XML file and check the
     // performance of the different methods.
@@ -66,6 +85,7 @@ void runTests(const QString filename) {
     f.readAll();
     f.close();
 
+    qDebug("%10d ms XmlStreamReader::processElementsByTagNameHierarchy2", runTest(&readUsingEasyStreamReader2_2, filename));
     qDebug("%10d ms XmlStreamReader::processElementsByTagNameHierarchy", runTest(&readUsingEasyStreamReader2, filename));
     qDebug("%10d ms XmlStreamReader::processElementsByTagName", runTest(&readUsingEasyStreamReader1, filename));
 

@@ -184,6 +184,23 @@ QHash<QString, QString> EasyXmlStreamReader::getTextElements(QStringList names) 
     return results;
 }
 
+// Use .text() instead of .readElementText()
+QHash<QString, QString> EasyXmlStreamReader::getTextElements2(QStringList names) {
+    QHash<QString, QString> results;
+    // readNextStartElement() descends the XML tree which
+    // is undesirable, but we skip over descendants below
+    // which keeps us on the same level.
+    while (!names.isEmpty() && _xml.readNextStartElement()) {
+        if (names.contains(_xml.name().toString())) {
+            results.insert(_xml.name().toString(),
+                           _xml.text().toString());
+            names.removeOne(_xml.name().toString());
+        }
+        _xml.skipCurrentElement();
+    }
+    return results;
+}
+
 QString EasyXmlStreamReader::errorString() {
     return QObject::tr("%1\nLine %2, column %3")
             .arg(_xml.errorString())
