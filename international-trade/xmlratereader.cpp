@@ -17,8 +17,12 @@ void XmlRateReader::read() {
     if (xml.readNextStartElement() && xml.name() == "rates")
        processRates();
 
-    // A single readNext() is required here or else we'll get an error.
-    xml.readNext();
+    // readNextStartElement() leaves the stream in
+    // an invalid state at the end. A single readNext()
+    // will advance us to EndDocument.
+    if (xml.tokenType() == QXmlStreamReader::Invalid)
+        xml.readNext();
+
     if (xml.hasError()) {
         xml.raiseError();
         qDebug() << errorString();
