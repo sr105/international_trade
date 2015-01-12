@@ -44,18 +44,21 @@ void XmlRateReader::processRate() {
     if (!xml.isStartElement() || xml.name() != "rate")
         return;
 
-    Currency::addRate(getTextElement("from"), getTextElement("to"), getTextElement("conversion"));
-    // Jump past end of rate
-    xml.skipCurrentElement();
-}
+    QString from;
+    QString to;
+    QString conversion;
+     while (xml.readNextStartElement()) {
+        if (xml.name() == "from")
+            from = xml.text().toString();
+        else if (xml.name() == "to")
+            to = xml.text().toString();
+        else if (xml.name() == "conversion")
+            conversion = xml.text().toString();
+         xml.skipCurrentElement();
+     }
 
-QString XmlRateReader::getTextElement(const QString name) {
-    while (xml.readNextStartElement()) {
-        if (xml.name() == name)
-            return xml.readElementText();
-        xml.skipCurrentElement();
-    }
-    return QString();
+    if (!(from.isEmpty() || to.isEmpty() || conversion.isEmpty()))
+        Currency::addRate(from, to, conversion);
 }
 
 QString XmlRateReader::errorString() {

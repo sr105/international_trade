@@ -14,7 +14,6 @@ public:
 private:
     void processRates();
     void processRate();
-    QString getTextElement(const QString name);
     QString errorString();
 
     QString _filename;
