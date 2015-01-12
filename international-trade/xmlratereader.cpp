@@ -38,7 +38,6 @@ void XmlRateReader::processRates() {
         else
             xml.skipCurrentElement();
     }
-    xml.skipCurrentElement();
 }
 
 void XmlRateReader::processRate() {
