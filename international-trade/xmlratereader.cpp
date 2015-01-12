@@ -14,9 +14,9 @@ void XmlRateReader::read() {
     xmlFile.open(QIODevice::ReadOnly);
     xml.setDevice(&xmlFile);
 
-    while (xml.readNextStartElement())
-        if (xml.name() == "rates")
-            processRates();
+    if (xml.readNextStartElement() && xml.name() == "rates")
+       processRates();
+
     // A single readNext() is required here or else we'll get an error.
     xml.readNext();
     if (xml.hasError()) {
