@@ -14,6 +14,7 @@ public:
 private:
     void processRates();
     void processRate();
+    QString readNextText();
     QString errorString();
 
     QString _filename;

@@ -40,6 +40,11 @@ void XmlRateReader::processRates() {
     }
 }
 
+// Uncomment this to see another way to read element
+// text. It returns the concatenation of the text
+// from all child elements.
+//#define USE_READ_ELEMENT_TEXT 1
+
 void XmlRateReader::processRate() {
     if (!xml.isStartElement() || xml.name() != "rate")
         return;
@@ -49,16 +54,27 @@ void XmlRateReader::processRate() {
     QString conversion;
      while (xml.readNextStartElement()) {
         if (xml.name() == "from")
-            from = xml.text().toString();
+            from = readNextText();
         else if (xml.name() == "to")
-            to = xml.text().toString();
+            to = readNextText();
         else if (xml.name() == "conversion")
-            conversion = xml.text().toString();
-         xml.skipCurrentElement();
-     }
+            conversion = readNextText();
+#ifndef USE_READ_ELEMENT_TEXT
+        xml.skipCurrentElement();
+#endif
+    }
 
     if (!(from.isEmpty() || to.isEmpty() || conversion.isEmpty()))
         Currency::addRate(from, to, conversion);
+}
+
+QString XmlRateReader::readNextText() {
+#ifndef USE_READ_ELEMENT_TEXT
+    xml.readNext();
+    return xml.text().toString();
+#else
+    return xml.readElementText();
+#endif
 }
 
 QString XmlRateReader::errorString() {
