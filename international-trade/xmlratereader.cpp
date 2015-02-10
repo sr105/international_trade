@@ -52,7 +52,7 @@ void XmlRateReader::processRate() {
     QString from;
     QString to;
     QString conversion;
-     while (xml.readNextStartElement()) {
+    while (xml.readNextStartElement()) {
         if (xml.name() == "from")
             from = readNextText();
         else if (xml.name() == "to")
