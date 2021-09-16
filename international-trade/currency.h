@@ -5,6 +5,8 @@
 #include <QString>
 #include <QStringList>
 
+/* Add a comment */
+
 class Currency {
 public:
     static Currency *get(const QString name);
